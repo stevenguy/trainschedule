@@ -6,71 +6,91 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
 
-    <!-- Compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <!--Import Google Icon Font-->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <!--Import materialize.css-->
     <!-- Added a link to font awesome-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <!-- Added a link to Bootstrap-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <!-- Firebase Reference -->
+    <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
     <!-- Added a link to local css-->
-    <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
     <link rel="stylesheet" type="text/css" href="assets/css/reset.css">
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
        
 </head>
 <body>
-
     <div class="container">
+        <!-- form header and titles -->
         <h1>Choo Choo Daily Trains</h1>
-        <h4>Current Train Schedule</h4>
+        <!-- row filler to create padding -->
         <div class="row" style="height: 50px;"></div>
-        <form>
-            <div class="form-group">
-                <label for="trainNameLabel">Train Name</label>
-                <input type="text" class="form-control" id="trainName" placeholder="Add Train Name">
+        <!-- train schedule form -->
+        <div class="card">
+            <div class="card-header">
+                Add Train Schedule
             </div>
-            <div class="form-group">
-                <label for="destinationLabel">Destination</label>
-                <input type="text" class="form-control" id="destination" placeholder="Add Destination">
+            <div class="card-body">
+                <div class="col-lg-12">
+                    <form>
+                    <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="trainNameLabel">Train Name (ex: Blue Line)</label>
+                            <input type="text" class="form-control" id="trainNameInput" placeholder="Add Train Name">
+                        </div>
+                        <div class="form-group">
+                            <label for="destinationLabel">Destination (ex: Los Angeles)</label>
+                            <input type="text" class="form-control" id="destinationInput" placeholder="Add Destination">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="trainTimeLable">Train Time (ex: 7:00)</label>
+                            <input type="text" class="form-control" id="trainTimeInput" placeholder="Add First Train Time">
+                        </div>
+                        <div class="form-group">
+                            <label for="frequncyLabel">Frequency In Minutes (ex: 15) </label>
+                            <input type="text" class="form-control" id="frequncyInput" placeholder="Add Train Frequency">
+                        </div>
+                    </div>
+                    </div>
+                        <button id="submit-schedule" type="button" class="btn btn-outline-dark">Submit</button>
+                    </form>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="trainTimeLable">Train Time</label>
-                <input type="text" class="form-control" id="trainTime" placeholder="Add First Train Time">
-            </div>
-            <div class="form-group">
-                <label for="frequncyLabel">Frequency</label>
-                <input type="text" class="form-control" id="frequncy" placeholder="Add Train Frequency">
-            </div>
-        </form>
+        </div>
     </div>
+    <!-- row filler to create padding -->
     <div class="row" style="height: 50px;"></div>
+    <!-- train schedule tables -->
     <div class="container">
-
-        <table class="table">
-            <thead>
-            <tr>
-                <th scope="col">Train Name</th>
-                <th scope="col">Destination</th>
-                <th scope="col">Frequency</th>
-                <th scope="col">Next Arrival</th>
-                <th scope="col">Minutes Away</th>
-            </tr>
-            </thead>
-            <tbody>
-            <!-- Insert movie rows here -->
-            </tbody>
-        </table>
+        <div class="card">
+            <div class="card-header">
+                Current Train Schedule
+            </div>
+            <div class="card-body">
+                <table class="table table-sm table-hover" id="train-schedule">
+                    <thead>
+                    <tr>
+                        <th scope="col">Train Name</th>
+                        <th scope="col">Destination</th>
+                        <th scope="col">Frequency (Minutes)</th>
+                        <th scope="col">Next Arrival Time</th>
+                        <th scope="col">Minutes Away</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Insert train rows here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
 
-<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script type="text/javascript" src="assets/javascript/javascript.js"></script>
-    
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="assets/javascript/javascript.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+
 
 </body>
 </html>

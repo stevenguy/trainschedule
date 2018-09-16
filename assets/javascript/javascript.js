@@ -1,23 +1,105 @@
-// ### Overview
-// In this assignment, you'll create a train schedule application that incorporates Firebase to host arrival and departure data. Your app will retrieve and manipulate this information with Moment.js. This website will provide up-to-date information about various trains, namely their arrival times and how many minutes remain until they arrive at their station.
-// - - -
-// ### Setup
-// * We'll leave that up to you -- however you like. Just make sure you're using Firebase to store data, GitHub to backup your project, and GitHub Pages to host your finished site.
-// ### Submission on BCS
-// * Please submit both the deployed Github.io link to your homework AND the link to the Github Repository!
-// ### Instructions
-// * Make sure that your app suits this basic spec:
-//   * When adding trains, administrators should be able to submit the following:
-//     * Train Name
-//     * Destination 
-//     * First Train Time -- in military time
-//     * Frequency -- in minutes
-//   * Code this app to calculate when the next train will arrive; this should be relative to the current time.
-//   * Users from many different machines must be able to view same train times.
-//   * Styling and theme are completely up to you. Get Creative!
-
-// 1. Use forms to add train schedule
+// 1. Use form to add train schedule
 // 2. Train schedule intervals (last arrival + frequency)
 // 3. interval updates
 // 4. Pull from firebase
 
+var config = {
+    //api key
+    apiKey: "AIzaSyAbRbiP02AIlIqtd1dt_o4oVqIEZQ_649Q",
+    //authorize domain
+    authDomain: "train-a27f0.firebaseapp.com",
+    //Database URL
+    databaseURL: "https://train-a27f0.firebaseio.com",
+    storageBucket: "train-a27f0.appspot.com"
+  };
+
+firebase.initializeApp(config);
+
+var database = firebase.database();
+  
+$("#submit-schedule").on("click", function(event) {
+    event.preventDefault();
+
+    var trainName = $("#trainNameInput").val().trim();
+    var destination = $("#destinationInput").val().trim();
+    var trainTime = moment($("#trainTimeInput").val().trim(), "hh:mm A").format("hh:mm A");
+    var frequency = $("#frequncyInput").val().trim();
+    
+    var newTrain = {
+        name: trainName,
+        stop: destination,
+        time: trainTime,
+        freq: frequency
+    };
+    
+    database.ref().push(newTrain);
+    
+    alert("Train Successfully Added");
+    
+    $("#trainNameInput").val("");
+    $("#destinationInput").val("");
+    $("#trainTimeInput").val("");
+    $("#frequncyInput").val("");
+
+});
+  
+// database.ref().on("child_added", function(childSnapshot) {
+//     console.log(childSnapshot.val());
+  
+//     var trainName = childSnapshot.val().name;
+//     var destination = childSnapshot.val().stop;
+//     var trainTime = childSnapshot.val().time;
+//     var firstTimeConverted = moment(trainTime, "hh:mm A").subtract(1, "years");
+//     var frequency = childSnapshot.val().freq;
+//     // current time
+//     var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
+//     var tRemainder = diffTime % frequency;
+//     var MinutesTillTrain = frequency - tRemainder;
+//     var nextTrain = moment().add(MinutesTillTrain, "minutes");
+//     var nextTrainFormatted = moment(nextTrain, "hh:mm A").format("hh:mm A")
+
+//     $("<td>").val("")
+
+//     var newRow = $("<tr>").append(
+//       $("<td>").text(trainName),
+//       $("<td>").text(destination),
+//       $("<td>").text(frequency),
+//       $("<td>").text(nextTrainFormatted),
+//       $("<td>").text(MinutesTillTrain)
+//     );
+
+//     $("#train-schedule > tbody").append(newRow);
+// });
+
+function refresh () {
+
+    setInterval(function(){ 
+
+        database.ref().on("child_added", function(childSnapshot) {
+            console.log(childSnapshot.val());
+          
+            var trainName = childSnapshot.val().name;
+            var destination = childSnapshot.val().stop;
+            var trainTime = childSnapshot.val().time;
+            var firstTimeConverted = moment(trainTime, "hh:mm A").subtract(1, "years");
+            var frequency = childSnapshot.val().freq;
+            // current time
+            var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
+            var tRemainder = diffTime % frequency;
+            var MinutesTillTrain = frequency - tRemainder;
+            var nextTrain = moment().add(MinutesTillTrain, "minutes");
+            var nextTrainFormatted = moment(nextTrain, "hh:mm A").format("hh:mm A")
+        
+            var newRow = $("<tr>").append(
+              $("<td>").text(trainName),
+              $("<td>").text(destination),
+              $("<td>").text(frequency),
+              $("<td>").text(nextTrainFormatted),
+              $("<td>").text(MinutesTillTrain)
+            );
+        
+            $("#train-schedule > tbody").append(newRow);
+        });
+    }, 3000)
+}
+refresh()
