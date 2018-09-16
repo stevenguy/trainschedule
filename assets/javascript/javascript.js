@@ -42,64 +42,53 @@ $("#submit-schedule").on("click", function(event) {
     $("#frequncyInput").val("");
 
 });
-  
-// database.ref().on("child_added", function(childSnapshot) {
-//     console.log(childSnapshot.val());
-  
-//     var trainName = childSnapshot.val().name;
-//     var destination = childSnapshot.val().stop;
-//     var trainTime = childSnapshot.val().time;
-//     var firstTimeConverted = moment(trainTime, "hh:mm A").subtract(1, "years");
-//     var frequency = childSnapshot.val().freq;
-//     // current time
-//     var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
-//     var tRemainder = diffTime % frequency;
-//     var MinutesTillTrain = frequency - tRemainder;
-//     var nextTrain = moment().add(MinutesTillTrain, "minutes");
-//     var nextTrainFormatted = moment(nextTrain, "hh:mm A").format("hh:mm A")
 
-//     $("<td>").val("")
+function updateSchedule() {
 
-//     var newRow = $("<tr>").append(
-//       $("<td>").text(trainName),
-//       $("<td>").text(destination),
-//       $("<td>").text(frequency),
-//       $("<td>").text(nextTrainFormatted),
-//       $("<td>").text(MinutesTillTrain)
-//     );
-
-//     $("#train-schedule > tbody").append(newRow);
-// });
+    database.ref().on("child_added", function(childSnapshot) {
+        console.log(childSnapshot.val());
+        
+        var trainName = childSnapshot.val().name;
+        var destination = childSnapshot.val().stop;
+        var trainTime = childSnapshot.val().time;
+        var firstTimeConverted = moment(trainTime, "hh:mm A").subtract(1, "years");
+        var frequency = childSnapshot.val().freq;
+        var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
+        var tRemainder = diffTime % frequency;
+        var MinutesTillTrain = frequency - tRemainder;
+        var nextTrain = moment().add(MinutesTillTrain, "minutes");
+        var nextTrainFormatted = moment(nextTrain, "hh:mm A").format("hh:mm A");
+        
+        var newRow = $("<tr>").append(
+            $("<td>").text(trainName),
+            $("<td>").text(destination),
+            $("<td>").text(frequency),
+            $("<td>").text(nextTrainFormatted),
+            $("<td>").text(MinutesTillTrain)
+        );
+        $("#train-schedule > tbody").append(newRow);
+    });
+    manualRefresh()
+}
+updateSchedule()
 
 function refresh () {
-
     setInterval(function(){ 
+        $("#train-schedule > tbody").fadeOut();
+        $("#train-schedule > tbody").empty();
+        updateSchedule();
+        $("#train-schedule > tbody").fadeIn();
 
-        database.ref().on("child_added", function(childSnapshot) {
-            console.log(childSnapshot.val());
-          
-            var trainName = childSnapshot.val().name;
-            var destination = childSnapshot.val().stop;
-            var trainTime = childSnapshot.val().time;
-            var firstTimeConverted = moment(trainTime, "hh:mm A").subtract(1, "years");
-            var frequency = childSnapshot.val().freq;
-            // current time
-            var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
-            var tRemainder = diffTime % frequency;
-            var MinutesTillTrain = frequency - tRemainder;
-            var nextTrain = moment().add(MinutesTillTrain, "minutes");
-            var nextTrainFormatted = moment(nextTrain, "hh:mm A").format("hh:mm A")
-        
-            var newRow = $("<tr>").append(
-              $("<td>").text(trainName),
-              $("<td>").text(destination),
-              $("<td>").text(frequency),
-              $("<td>").text(nextTrainFormatted),
-              $("<td>").text(MinutesTillTrain)
-            );
-        
-            $("#train-schedule > tbody").append(newRow);
-        });
-    }, 3000)
+    }, 60000)
 }
 refresh()
+
+function manualRefresh () {
+    $("#refresh-data").on("click", function() {
+        $("#train-schedule > tbody").fadeOut();
+        $("#train-schedule > tbody").empty();
+        updateSchedule();
+        $("#train-schedule > tbody").fadeIn();
+    })
+}
+manualRefresh()

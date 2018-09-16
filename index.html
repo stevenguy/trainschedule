@@ -19,6 +19,8 @@
 </head>
 <body>
     <div class="container">
+        <!-- row filler to create padding -->
+        <div class="row" style="height: 30px;"></div>
         <!-- form header and titles -->
         <h1>Choo Choo Daily Trains</h1>
         <!-- row filler to create padding -->
@@ -65,8 +67,15 @@
     <div class="container">
         <div class="card">
             <div class="card-header">
-                Current Train Schedule
+                <div class="row">
+                    <div class="col-lg-6">Current Train Schedule</div>
+                    <div class="col-lg-4"></div>
+                    <div class="col-lg-2">
+                        <button id="refresh-data" type="button" class="btn btn-outline-dark">Refresh Schedule</button>
+                    </div>
+                </div>
             </div>
+            
             <div class="card-body">
                 <table class="table table-sm table-hover" id="train-schedule">
                     <thead>
